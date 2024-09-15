@@ -1,6 +1,6 @@
 const LIFT_SPEED = 2000;
 const DOOR_OPEN_CLOSE_DURATION = 1000;
-const FLOOR_DISTANCE = 120 + 10 + 10 + 10 + 2; //floor height + current floor padding top + gap b/w floors + next floor padding bottom + apprx val
+const FLOOR_DISTANCE = 120 + 1; //floor height + apprx val
 let lifts = [];
 let floors = [];
 
@@ -104,10 +104,12 @@ function createLift(liftId) {
 // eslint-disable-next-line no-unused-vars
 function startLiftSim() {
   console.log("trig function");
-  const numFloors = parseInt(document.getElementById("num-floors").value);
-  const numLifts = parseInt(document.getElementById("num-lifts").value);
+  lifts = [];
+  floors = [];
   const liftSimDiv = document.getElementById("lift-sim");
   liftSimDiv.innerHTML = "";
+  const numFloors = parseInt(document.getElementById("num-floors").value);
+  const numLifts = parseInt(document.getElementById("num-lifts").value);
 
   for (let i = 0; i < numFloors; i++) {
     const floor = createFloor(i, numLifts, numFloors);

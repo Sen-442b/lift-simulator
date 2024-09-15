@@ -14,7 +14,6 @@ body {
 .lift-sim {
   display: flex;
   flex-direction: column-reverse;
-  gap: 10px;
   width: 100%;
   max-width: 800px;
 }
@@ -24,12 +23,14 @@ body {
   justify-content: space-between;
   align-items: center;
   border: 1px solid black;
-  padding: 10px;
+  padding-left: 10px;
+  padding-right: 10px;
   height: 120px;
 }
 
 .lift-shaft {
   display: flex;
+  /* justify-content: space-between; */
   align-items: end;
   gap: 10px;
   height: 100%;
@@ -48,6 +49,8 @@ body {
   align-items: center;
   font-weight: bold;
   transition: transform 0.5s ease-in-out;
+  /* position: absolute;
+  bottom: 10px; */
 }
 
 .buttons {
@@ -67,4 +70,25 @@ body {
 .floor-number {
   font-weight: bold;
   margin-right: 10px;
+}
+
+@media (max-width: 600px) {
+  .lift-sim {
+    max-width: 100%;
+  }
+
+  .floor {
+    flex-direction: column;
+    height: auto;
+  }
+
+  .lift-shaft {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .buttons {
+    flex-direction: row;
+    margin-top: 10px;
+  }
 }
