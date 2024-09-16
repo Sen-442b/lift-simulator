@@ -40,17 +40,22 @@ body {
 }
 
 .lift {
-  width: 50px;
+  width: 60px;
   height: 80px;
   background-color: #f0f0f0;
   border: 2px solid #333;
   display: flex;
-  justify-content: center;
-  align-items: center;
   font-weight: bold;
   transition: transform 0.5s ease-in-out;
+  overflow: hidden;
   /* position: absolute;
   bottom: 10px; */
+}
+
+.door {
+  width: 30px;
+  height: 100%;
+  background: black;
 }
 
 .buttons {

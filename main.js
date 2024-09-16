@@ -1,5 +1,5 @@
 const LIFT_SPEED = 2000;
-const DOOR_OPEN_CLOSE_DURATION = 1000;
+const DOOR_OPEN_CLOSE_DURATION = 2500; //ms
 const FLOOR_DISTANCE = 120 + 1; //floor height + apprx val
 let lifts = [];
 let floors = [];
@@ -41,11 +41,17 @@ async function moveLift(lift) {
 
     lift.currentFloor = targetFloor;
     // Open and close doors
-    lift.element.style.backgroundColor = "#ffff00";
-    await new Promise((resolve) =>
-      setTimeout(resolve, DOOR_OPEN_CLOSE_DURATION)
-    );
-    lift.element.style.backgroundColor = "#f0f0f0";
+    const doors = lift.element.querySelectorAll(".door");
+    doors.forEach((door, idx) => {
+      door.style.transition = `transform ${DOOR_OPEN_CLOSE_DURATION}ms ease-in-out`;
+      door.style.transform = `translateX(${idx === 0 ? "-" : ""}60px)`;
+    });
+
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+
+    doors.forEach((door) => {
+      door.style.transform = `translateX(0)`;
+    });
   }
   lift.isMoving = false;
 }
@@ -74,7 +80,6 @@ function createFloor(floorId, numLifts, numFloors) {
   downButton.onclick = () => callLift(floorId);
   buttons.appendChild(upButton);
   buttons.appendChild(downButton);
-  console.log({ floorId, numFloors });
   if (floorId === numFloors - 1) upButton.style.display = "none";
   if (floorId === 0) downButton.style.display = "none";
 
@@ -82,7 +87,7 @@ function createFloor(floorId, numLifts, numFloors) {
 
   let shaftWidth = 0;
   for (let i = 0; i < numLifts; i++) {
-    shaftWidth += 50; //add current lift width
+    shaftWidth += 60; //add current lift width
   }
   liftShaft.style.width = `${shaftWidth}px`;
   floor.appendChild(floorNumber);
@@ -119,7 +124,10 @@ function startLiftSim() {
 
   for (let i = 0; i < numLifts; i++) {
     const lift = createLift(i);
+    lift.element.appendChild(createElementWithClassName("div", "door"));
+    lift.element.appendChild(createElementWithClassName("div", "door"));
     lifts.push(lift);
+
     floors[0].querySelector(".lift-shaft").appendChild(lift.element);
   }
 }
