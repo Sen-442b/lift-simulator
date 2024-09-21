@@ -36,33 +36,53 @@ async function moveLift(lift) {
     lift.element.style.transform = `translateY(${-(
       targetFloor * FLOOR_DISTANCE
     )}px)`;
-
+    lift.currentFloor = targetFloor;
     await new Promise((resolve) => setTimeout(resolve, moveTime));
 
-    lift.currentFloor = targetFloor;
     // Open and close doors
     const doors = lift.element.querySelectorAll(".door");
-    doors.forEach((door, idx) => {
-      door.style.transition = `transform ${DOOR_OPEN_CLOSE_DURATION}ms ease-in-out`;
-      door.style.transform = `translateX(${idx === 0 ? "-" : ""}60px)`;
+    const openDoorsPromise = new Promise((resolve) => {
+      doors.forEach((door, idx) => {
+        door.style.transform = `translateX(${idx === 0 ? "-" : ""}60px)`;
+      });
+      setTimeout(resolve, DOOR_OPEN_CLOSE_DURATION);
     });
 
-    await new Promise((resolve) => setTimeout(resolve, 2000));
+    await openDoorsPromise;
 
-    doors.forEach((door) => {
-      door.style.transform = `translateX(0)`;
+    console.log("Doors opened");
+
+    const closeDoorsPromise = new Promise((resolve) => {
+      doors.forEach((door) => {
+        door.style.transform = `translateX(0)`;
+      });
+      setTimeout(resolve, DOOR_OPEN_CLOSE_DURATION);
     });
+
+    await closeDoorsPromise;
   }
+  console.log("lift moved");
   lift.isMoving = false;
 }
 
 function callLift(floorId) {
-  const availableLift = getAvailableLift(floorId);
-  if (availableLift) {
-    availableLift.targetFloors.push(floorId);
+  const staleLiftExistsOnFloor = lifts.find(({ currentFloor }) => {
+    return currentFloor === floorId;
+  });
+  console.log({ staleLiftExistsOnFloor });
+  if (staleLiftExistsOnFloor) {
+    if (!staleLiftExistsOnFloor.isMoving) {
+      staleLiftExistsOnFloor.targetFloors.push(floorId);
+    }
+    moveLift(staleLiftExistsOnFloor);
+  } else {
+    const availableLift = getAvailableLift(floorId);
+    if (availableLift) {
+      availableLift.targetFloors.push(floorId);
 
-    if (!availableLift.isMoving) {
-      moveLift(availableLift);
+      if (!availableLift.isMoving) {
+        moveLift(availableLift);
+      }
     }
   }
 }
@@ -108,7 +128,6 @@ function createLift(liftId) {
 
 // eslint-disable-next-line no-unused-vars
 function startLiftSim() {
-  console.log("trig function");
   lifts = [];
   floors = [];
   const liftSimDiv = document.getElementById("lift-sim");
