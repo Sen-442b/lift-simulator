@@ -8,6 +8,7 @@ body {
 }
 
 .controls {
+  text-align: center;
   margin-bottom: 20px;
 }
 
@@ -16,6 +17,10 @@ body {
   flex-direction: column-reverse;
   width: 100%;
   max-width: 800px;
+}
+#lift-sim-form {
+  display: flex;
+  gap: 2rem;
 }
 
 .floor {
@@ -34,7 +39,7 @@ body {
   align-items: end;
   gap: 10px;
   height: 100%;
-  background-color: red;
+
   padding-left: 1rem;
   padding-right: 1rem;
 }
@@ -80,21 +85,7 @@ body {
 
 @media (max-width: 600px) {
   .lift-sim {
-    max-width: 100%;
-  }
-
-  .floor {
-    flex-direction: column;
-    height: auto;
-  }
-
-  .lift-shaft {
-    width: 100%;
-    justify-content: center;
-  }
-
-  .buttons {
-    flex-direction: row;
-    margin-top: 10px;
+    max-width: initial;
+    width: 99vw;
   }
 }

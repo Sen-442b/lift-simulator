@@ -91,7 +91,8 @@ function createFloor(floorId, numLifts, numFloors) {
   const floor = createElementWithClassName("div", "floor");
   const buttons = createElementWithClassName("div", "buttons");
   const floorNumber = createElementWithClassName("div", "floor-number");
-  floorNumber.textContent = `Floor ${floorId}`;
+  const isMobile = window.innerWidth <= 768;
+  floorNumber.textContent = isMobile ? `${floorId}` : `Floor ${floorId}`;
   const upButton = createElementWithClassName("button", "btn btn-up");
   upButton.textContent = "↑";
   upButton.onclick = () => callLift(floorId);
@@ -126,7 +127,6 @@ function createLift(liftId) {
   };
 }
 
-// eslint-disable-next-line no-unused-vars
 function startLiftSim() {
   lifts = [];
   floors = [];
@@ -150,3 +150,43 @@ function startLiftSim() {
     floors[0].querySelector(".lift-shaft").appendChild(lift.element);
   }
 }
+
+document.addEventListener("DOMContentLoaded", function () {
+  updateLiftLimit();
+  const form = document.getElementById("lift-sim-form");
+
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    startLiftSim();
+  });
+});
+
+function validateInput(input) {
+  const value = parseFloat(input.value);
+
+  if (isNaN(value)) {
+    input.setCustomValidity("Please enter a valid number");
+  } else if (value < input.min) {
+    input.setCustomValidity(`At least ${input.min} ${input.name} required`);
+  } else if (value > input.max) {
+    input.setCustomValidity(`maximum ${input.max} ${input.name}s are allowed`);
+  } else {
+    input.setCustomValidity("");
+  }
+}
+
+function updateLiftLimit() {
+  const liftInput = document.getElementById("num-lifts");
+  const isMobile = window.matchMedia("(max-width: 768px)").matches;
+
+  if (isMobile) {
+    liftInput.max = 4;
+    liftInput.value = Math.min(liftInput.value, 3);
+    validateInput(liftInput);
+  } else {
+    liftInput.max = 10;
+    validateInput(liftInput);
+  }
+}
+
+window.addEventListener("resize", updateLiftLimit);

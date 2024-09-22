@@ -4,12 +4,41 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="./style.css" />
+    <title>Lift Simulation</title>
   </head>
   <body>
     <div class="controls">
-      <input type="number" id="num-floors" min="1" max="20" value="5" /> Floors
-      <input type="number" id="num-lifts" min="1" max="5" value="2" /> Lifts
-      <button onclick="startLiftSim()">Start Simulation</button>
+      <h1>Lift Simulation</h1>
+      <form id="lift-sim-form">
+        <div>
+          <input
+            name="floor"
+            type="number"
+            id="num-floors"
+            min="1"
+            max="20"
+            value="5"
+            required
+            oninput="validateInput(this)"
+          />
+          <span>Floors</span>
+        </div>
+        <div>
+          <input
+            name="lift"
+            type="number"
+            id="num-lifts"
+            min="1"
+            max="10"
+            value="2"
+            required
+            oninput="validateInput(this)"
+          />
+          <span>Lifts</span>
+        </div>
+
+        <button type="submit">Start Simulation</button>
+      </form>
     </div>
     <div class="lift-sim" id="lift-sim"></div>
     <script src="./main.js"></script>
