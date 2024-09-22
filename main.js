@@ -181,7 +181,6 @@ function updateLiftLimit() {
 
   if (isMobile) {
     liftInput.max = 4;
-    liftInput.value = Math.min(liftInput.value, 3);
     validateInput(liftInput);
   } else {
     liftInput.max = 10;
